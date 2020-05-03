@@ -1,0 +1,134 @@
+\section{Name}
+
+\begin{dfn}[Cardinalities of a signatures and structures]
+    Given a signature $\Si$, 
+    we define 
+    $|\Si| := |\const{\Si}| + |\func{\Si}| + \rel{\Si}$
+    to be the cardinality of the signature $\Si$.
+\end{dfn}
+
+\begin{prop}[Moving Models Down Signatures]
+    Given two signatures such that $\const{\Si} \subs \const{\Si^*}$, 
+    two theories $T \subs T^*$ such that $T$ is a $\Si$-theory and $T^*$ is a $\Si^*$-theory,
+    given $\MM$ a $\Si^*$-model of $T^*$,
+    then we can make $\MM$ into $(\carrier{\MM},\intp{\Si}{\MM})$
+    a $\Si$-model of $T$.
+    Technically the new structure is not $\MM$,
+    but for convenience we write 
+    $\MM$ to mean either of the two and let subscripts involving 
+    $\Si$ and $\Si^*$ describe which one we mean.
+\end{prop}
+\begin{proof}
+    Consider $(\carrier{\MM},\intp{\Si}{\MM})$, 
+    where $\intp{\Si}{\MM}$ is defined by 
+    $(\intp{\const{\Si}}{\MM},\intp{\func{\Si}}{\MM},\intp{\rel{\Si}}{\MM})$ 
+    which are defined by:
+    \begin{itemize}
+        \item $\intp{\const{\Si}}{\MM}$ is
+        the restriction of $\intp{\const{\Si^*}}{\MM}$ to $\const{\Si}$
+        \item $\intp{\func{\Si}}{\MM}:=\intp{\func{\Si^*}}{\MM}$
+        \item $\intp{\rel{\Si}}{\MM}:=\intp{\rel{\Si^*}}{\MM}$
+    \end{itemize}
+    We also want to have that for any $\Si$-term $t$, 
+    the induced maps
+    $\subintp{\Si}{\MM}{t}$ and $ \subintp{\Si^*}{\MM}{t}$
+    are equal.
+    Indeed:
+    \begin{itemize}
+        \item If $t$ is a constant then 
+        $\subintp{\Si}{\MM}{t} = \subintp{\Si}{\MM}{c} =
+        \subintp{\Si^*}{\MM}{c} = \subintp{\Si^*}{\MM}{t}$
+        \item If $t$ is a variable then 
+        $\subintp{\Si}{\MM}{t} = \id{\carrier{\MM}} =
+        \subintp{\Si^*}{\MM}{t}$
+        \item If $t$ is $f(s)$ then 
+        $\subintp{\Si}{\MM}{t} = \subintp{\Si}{\MM}{f}(\subintp{\Si}{\MM}{s}) =
+        \subintp{\Si^*}{\MM}{f}(\subintp{\Si^*}{\MM}{s}) = \subintp{\Si^*}{\MM}{t} $
+    \end{itemize}
+    
+    Let $\phi$ be a formula in $T \subs T^*$ with variables
+    indexed by $S \subs \N$.
+    Let $a$ be in $(\carrier{\MM})^S$.
+    Case on $\phi$ to show that 
+    $\MM \model{\Si} \phi(a)$:
+    \begin{itemize}
+        \item If $\phi$ is $t = s$, 
+        then $\MM \model{\Si^*} \phi(a)$.
+        Hence by definition of $\intp{\Si}{\MM}$ we have
+        $\subintp{\Si}{\MM}{t} = \subintp{\Si^*}{\MM}{t} =
+        \subintp{\Si^*}{\MM}{s} = \subintp{\Si}{\MM}{s}$ 
+        and so
+        $\MM \model{\Si} \phi(a)$.
+        \item If $\phi$ is $r(t)$, 
+        then $\MM \model{\Si^*} \phi(a)$.
+        Hence by definition of $\intp{\Si}{\MM}$ we have
+        $\subintp{\Si}{\MM}{t}(a)  = \subintp{\Si^*}{\MM}{t}(a) \in
+        \subintp{\Si^*}{\MM}{r} =  \subintp{\Si}{\MM}{r}$ 
+        and so
+        $\MM \model{\Si} \phi(a)$.
+        \item If $\phi$ is $\NOT \psi$
+        then $\MM \nodel{\Si^*} \psi(a)$.
+        Hence $\MM \nodel{\Si} \psi(a)$ by the induction hypothesis.
+        \item If $\phi$ is $\psi \OR \chi$
+        then $\MM \model{\Si^*} \psi(a)$ or $\MM \model{\Si^*} \chi(a)$.
+        Hence $\MM \model{\Si} \psi(a)$ or 
+        $\MM \model{\Si} \chi(a)$
+        by the induction hypothesis.
+        \item If $\phi$ is $\forall v, \psi$ then for all $b \in \carrier{\MM}$, $\MM \model{\Si^*} \psi(a)$. 
+        Hence for all $b \in \carrier{\MM}$,
+        $\MM \model{\Si} \psi(a)$ by the induction hypothesis.
+    \end{itemize}
+    Hence $\MM \model{\Si} T$.
+\end{proof}
+
+\begin{prop}[Infinite models produce models with arbitrary large cardinality]
+    Given $\Si$ a signature, 
+    $T$ a $\Si$-theory that has an infinite model,
+    and a cardinal $\ka \geq |\Si| + \aleph_0$, 
+    there exists $\MM$ a $\Si$-model of $T$ such that 
+    $\ka \leq |\carrier{\MM}|$.
+\end{prop}
+\begin{proof}
+    Enrich only the signature's constant symbols to create $\Si^*$ 
+    a signature such that 
+    $\const{\Si^*} = \const{\Si} \cup \set{c_\al \st \al \in \ka}$.
+    Let $T^* = T \cup \set{c_\al \neq c_\be \st \al,\be \in \ka \AND \al \ne \be}$
+    be a $\Si^*$-theory.
+    
+    Using \linkto{compactness}{the compactness theorem}, 
+    it suffices to show that $T^*$ is finitely satisfiable.
+    Take a finite subset of $T^*$. 
+    This is the union of a finite subset $\De_T \subs T$, 
+    and a finite subset of 
+    $\De_{\ka} \subs 
+    \set{c_\al \neq c_\be \st \al,\be \in \ka \AND \al \ne \be}$.
+    Let $\MM$ be the $\Si$-model of $T$ with infinite cardinality.
+    We want to make 
+    $(\carrier{\MM},\intp{\Si^*}{\MM}) \model{\Si^*} \De_T \cup \De_\ka$ 
+    by interpreting the new symbols of $\set{c_\al \st \al \in \ka}$
+    in a sensible way.
+    
+    Since $\De_\ka$ is finite, we can find a finite subset $I \subset \ka$ that indexes the constant symbols appearing in $\De_\ka$. 
+    Since $\MM$ is infinite and $I$ is finite,
+    we can find distinct elements of $\MM$
+    to interpret the elements of
+    $\set{c_\al \st \al \in I}$. 
+    Interpret the rest of the new constant symbols however,
+    for example let them all be sent to the same element,
+    then $\MM \model{\Si*} \De_T \cup \De_\ka$.
+    Hence $T*$ is satisfiable.
+    
+    Using 
+    \linkto{better_compactness}{the even better compactness theorem},
+    $T^*$ is finitely satisfiable implies there exists
+    $\MM$ a $\Si^*$-model of $T^*$ with $|\carrier{\MM}|\leq \ka$.
+    If $|\carrier{\MM}| < \ka$ 
+    then there would be $c_\al, c_\be$ that are interpreted as equal,
+    hence $\MM \model{\Si^*} c_\al = c_\be$ and $\MM \nodel{\Si^*} c_\al = c_\be$, 
+    a contradiction.
+    Thus $|\carrier{\MM}| = \ka$.
+    \linkto{move_down_sig}{Move $\MM$ down a signature}
+    to make it a model of $T$.
+    This doesn't change the cardinality of $\MM$,
+    so we have a model of $T$ with $|\carrier{\MM}| = \ka$.
+\end{proof}
